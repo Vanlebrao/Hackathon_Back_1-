@@ -36,7 +36,7 @@ class SessionController {
       admin: user.admin,
       token: Jwt.sign({ id: user.id, name: user.name }, auth.secret, { expiresIn: auth.expiresIn })
       // O token novo precisa de três parâmetros: 1) dado personalizado (colocamos o ID do usuário); 2) string única, gerada pelo MD5 3) quanto tempo o usuário pode ficar logado, em quanto tempo ele  expirará
-    }) // no 1o parâmetro adicionamos o name do usuário para utilizar na order (via token)
+    }) // no 1o parâmetro adicionamos o name do usuário para utilizar (via token)
   }
 }
 
