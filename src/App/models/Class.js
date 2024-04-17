@@ -6,7 +6,8 @@ class Class extends Model {
       course: Sequelize.STRING,
       module: Sequelize.STRING,
       lesson: Sequelize.STRING,
-      time: Sequelize.STRING
+      time: Sequelize.STRING,
+      status: Sequelize.BOOLEAN
     },
     {
       sequelize

@@ -26,6 +26,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false // campo nulo = não, todos tem que ter tempo de duração
       },
+      status: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false, // se não mandar informação nenhuma o valor dele vai ser falso
+        allowNull: false
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false

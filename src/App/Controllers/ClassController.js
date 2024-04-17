@@ -9,10 +9,12 @@ class ClassController {
   async store (request, response) {
     const schema = Yup.object().shape({ // formato do objeto abaixo:
       course: Yup.string().required(),
-      module: Yup.string().required(), // após criar o relacionamento, alteraremos o "module: Yup.string()" para "YUP.number"
+      module: Yup.string().required(),
       lesson: Yup.string().required(),
       time: Yup.string().required(),
-      weekday_id: Yup.number() // não é obrigatório
+      status: Yup.boolean(),
+      weekday_id: Yup.number() // não é obrigatório // após criar o relacionamento, alteraremos o "module: Yup.string()" para "YUP.number"
+
     })
 
     // caso ele não atenda ao formato exigido acima ele vai dar erro conforme no UserControllers, dizendo o que está de errado
@@ -28,13 +30,14 @@ class ClassController {
       return response.status(401).json()
     }
 
-    const { course, module, lesson, time, weekday_id } = request.body // após criar o relacionamento, adicionamos "weekday_id"
+    const { course, module, lesson, time, status, weekday_id } = request.body // após criar o relacionamento, adicionamos "weekday_id"
 
     const classDev = await Class.create({
       course,
       module,
       lesson,
       time,
+      status,
       weekday_id // após criar o relacionamento, criamos "weekday_id"
     })
 
@@ -73,12 +76,6 @@ class ClassController {
       return response.status(400).json({ error: err.errors })
     }
 
-    // verficando se a pessoa que está logado é o admin:
-    const { admin: isAdmin } = await User.findByPk(request.userId) // Ele vai pegar as informações de userid dentro do token e vai pegar a informação admin que tem dentre as informações do usuário (true ou false)
-    if (!isAdmin) {
-      return response.status(401).json()
-    }
-
     // após as validações vamos verificar se o ID digitado para a alteração é um ID válido
     const id = request.params.id
     const classDev = await Class.findByPk(id)
@@ -86,13 +83,14 @@ class ClassController {
       return response.status(401).json({ error: 'Make sure your class ID is correct' })
     }
 
-    const { course, module, lesson, time, weekday_id } = request.body
+    const { course, module, lesson, time, status, weekday_id } = request.body
 
     await Class.update({ // aqui eu to dizendo pra ele que dentro de produtos vamos alterar os itens abaixo
       course,
       module, // porém como na validação não é obrigatório, o Sequelize nos ajuda com isso e entende que se não colocamos, não vamos alterar
       lesson, // qualquer um desses itens
       time,
+      status,
       weekday_id
     },
     { where: { id } } // aqui falamos onde vamos alterar esses dados da tabela do Class, no id 2, por exemplo.
