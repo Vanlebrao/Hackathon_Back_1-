@@ -3,28 +3,20 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('classes', {
+    await queryInterface.createTable('habits', {
       id: {
         type: Sequelize.INTEGER, // número inteiro
         allowNull: false, // campo nulo = não
         autoIncrement: true, // ele vai dar sequencia no id, cria automatico
         primaryKey: true // chave primaria
       },
-      course: {
+      habit: {
         type: Sequelize.STRING,
-        allowNull: false // campo nulo = não, todos tem que ter o curso
+        allowNull: false // campo nulo = não, todos tem que ter o nome do hábito
       },
-      module: {
-        type: Sequelize.STRING,
+      day: {
+        type: Sequelize.INTEGER,
         allowNull: false // campo nulo = não, todos tem que ter modulo
-      },
-      lesson: {
-        type: Sequelize.STRING,
-        allowNull: false // campo nulo = não, todos tem que ter nome da aula
-      },
-      time: {
-        type: Sequelize.STRING,
-        allowNull: false // campo nulo = não, todos tem que ter tempo de duração
       },
       status: {
         type: Sequelize.BOOLEAN,
@@ -43,6 +35,6 @@ module.exports = {
   },
 
   async down (queryInterface) {
-    await queryInterface.dropTable('classes')
+    await queryInterface.dropTable('habits')
   }
 }
