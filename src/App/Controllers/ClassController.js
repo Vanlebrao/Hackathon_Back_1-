@@ -2,14 +2,16 @@
 
 import * as Yup from 'yup'
 import Class from '../models/Class.js'
+import Course from '../models/Course.js'
+import Module from '../models/Module.js'
 import User from '../models/User.js'
 import Weekdays from '../models/Weekdays.js'
 
 class ClassController {
   async store (request, response) {
     const schema = Yup.object().shape({ // formato do objeto abaixo:
-      course: Yup.string().required(),
-      module: Yup.string().required(),
+      course_id: Yup.number(),
+      module_id: Yup.number(),
       lesson: Yup.string().required(),
       time: Yup.string().required(),
       status: Yup.boolean(),
@@ -30,11 +32,11 @@ class ClassController {
       return response.status(401).json()
     }
 
-    const { course, module, lesson, time, status, weekday_id } = request.body // após criar o relacionamento, adicionamos "weekday_id"
+    const { course_id, module_id, lesson, time, status, weekday_id } = request.body // após criar o relacionamento, adicionamos "weekday_id"
 
     const classDev = await Class.create({
-      course,
-      module,
+      course_id, // após criar o relacionamento, criamos "course_id"
+      module_id, // após criar o relacionamento, criamos "module_id"
       lesson,
       time,
       status,
@@ -51,6 +53,16 @@ class ClassController {
           model: Weekdays, // vamos pegar do model Weekdays
           as: 'weekday', // vamos chama-lo de weekday
           attributes: ['id', 'name'] // e vamos pegar os itens id e name apenas
+        },
+        {
+          model: Course, // vamos pegar do model Weekdays
+          as: 'course', // vamos chama-lo de weekday
+          attributes: ['id', 'course'] // e vamos pegar os itens id e name apenas
+        },
+        {
+          model: Module, // vamos pegar do model Weekdays
+          as: 'module', // vamos chama-lo de weekday
+          attributes: ['id', 'module'] // e vamos pegar os itens id e name apenas
         }
       ]
     })
@@ -62,11 +74,11 @@ class ClassController {
 
   async update (request, response) { // copiamos o store lá de cima pra ficar mais prático
     const schema = Yup.object().shape({ // formato do objeto abaixo:
-      course: Yup.string(),
-      module: Yup.string(), // após criar o relacionamento, alteraremos o "module: Yup.string()" para "YUP.number"
+      course_id: Yup.number(), // após criar o relacionamento, alteraremos o "module: Yup.string()" para "YUP.number"
+      module_id: Yup.number(), // após criar o relacionamento, alteraremos o "module: Yup.string()" para "YUP.number"
       lesson: Yup.string(),
       time: Yup.string(),
-      weekday_id: Yup.number()
+      weekday_id: Yup.number() // após criar o relacionamento, alteraremos o "module: Yup.string()" para "YUP.number"
     })
 
     // caso ele não atenda ao formato exigido acima ele vai dar erro conforme no UserControllers, dizendo o que está de errado
@@ -83,11 +95,11 @@ class ClassController {
       return response.status(401).json({ error: 'Make sure your class ID is correct' })
     }
 
-    const { course, module, lesson, time, status, weekday_id } = request.body
+    const { course_id, module_id, lesson, time, status, weekday_id } = request.body
 
     await Class.update({ // aqui eu to dizendo pra ele que dentro de produtos vamos alterar os itens abaixo
-      course,
-      module, // porém como na validação não é obrigatório, o Sequelize nos ajuda com isso e entende que se não colocamos, não vamos alterar
+      course_id,
+      module_id, // porém como na validação não é obrigatório, o Sequelize nos ajuda com isso e entende que se não colocamos, não vamos alterar
       lesson, // qualquer um desses itens
       time,
       status,

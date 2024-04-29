@@ -3,8 +3,6 @@ import Sequelize, { Model } from 'sequelize'
 class Class extends Model {
   static init (sequelize) {
     super.init({ // campo Id é gerado automaticamente por isso não está aqui
-      course: Sequelize.STRING,
-      module: Sequelize.STRING,
       lesson: Sequelize.STRING,
       time: Sequelize.STRING,
       status: Sequelize.BOOLEAN
@@ -19,6 +17,8 @@ class Class extends Model {
     this.belongsTo(models.Weekdays, { foreignKey: 'weekday_id', as: 'weekday' }) // belongsto=pertence  // pertence ao model de weekday,
     // a chave estrangeira (coluna) que no caso tem na minha tabela se chama "weekday_id" mas vamos chama-la de 'Weekday'
     // além disso precisamos avisar o index.js (database) sobre o relacionamento
+    this.belongsTo(models.Module, { foreignKey: 'module_id', as: 'module' })
+    this.belongsTo(models.Course, { foreignKey: 'course_id', as: 'course' })
   }
 }
 
