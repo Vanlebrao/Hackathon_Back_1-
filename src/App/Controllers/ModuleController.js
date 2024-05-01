@@ -1,4 +1,7 @@
+/* eslint-disable camelcase */
+
 import * as Yup from 'yup'
+import Course from '../models/Course.js'
 import Module from '../models/Module.js'
 import User from '../models/User.js'
 
@@ -6,7 +9,8 @@ import User from '../models/User.js'
 class ModuleController {
   async store (request, response) {
     const schema = Yup.object().shape({ // formato do objeto abaixo:
-      module: Yup.string().required()
+      module: Yup.string().required(),
+      course_id: Yup.number()
     })
 
     // caso ele não atenda ao formato exigido acima ele vai dar erro conforme no UserControllers, dizendo o que está de errado
@@ -22,7 +26,7 @@ class ModuleController {
     }
 
     // arquivos validados, vamos pegalos:
-    const { module } = request.body
+    const { module, course_id } = request.body
 
     const moduleExists = await Module.findOne({ // procurar se o dia da semana que tá ali já existe, para não cadastrar repetido
       where: { module } // se ele não acha ele retorna com null e daí cai no if.
@@ -32,15 +36,26 @@ class ModuleController {
       return response.status(400).json({ error: 'Module already exists' }) // erro avisando que já existe
     }
 
-    const { id } = await Module.create({ module })
+    const newModule = await Module.create({ module, course_id })
 
-    return response.status(201).json({ id, module })
+    return response.status(201).json(newModule)
   }
 
   async index (request, response) {
     try {
-      const lesson = await Module.findAll() // procure todos dentro dessa variavel
-      return response.json(lesson) // retorna todos
+      const classDev = await Module.findAll({ // procure todos os modulos dentro dessa variavel //após criar o relacionamento, dentro dos parênteses vamos adicionar:
+        include: [ // vamos incluir os itens abaixo:
+          {
+            model: Course,
+            as: 'course',
+            attributes: ['id', 'course'] // e vamos pegar os itens id e nome apenas
+          }
+        ]
+      })
+
+      console.log(request.userId)
+
+      return response.json(classDev) // retorna todos as aulas
     } catch (error) {
       return response.status(500).json({ error: 'Internal server error' })
     }
@@ -49,7 +64,8 @@ class ModuleController {
   async update (request, response) {
     try {
       const schema = Yup.object().shape({ // formato do objeto abaixo:
-        module: Yup.string()
+        module: Yup.string(),
+        course_id: Yup.number()
       })
 
       // caso ele não atenda ao formato exigido acima ele vai dar erro conforme no UserControllers, dizendo o que está de errado
@@ -64,7 +80,7 @@ class ModuleController {
         return response.status(401).json()
       }
 
-      const { module } = request.body
+      const { module, course_id } = request.body
       const { id } = request.params
 
       // vamos verificar se o ID está correto antes da alteração:
@@ -73,7 +89,7 @@ class ModuleController {
         return response.status(401).json({ error: 'Make sure your Module ID is correct' })
       }
 
-      await Module.update({ module }, { where: { id } })
+      await Module.update({ module, course_id }, { where: { id } })
 
       return response.status(200).json()
     } catch (err) {

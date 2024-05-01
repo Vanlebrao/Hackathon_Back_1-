@@ -18,7 +18,6 @@ class Class extends Model {
     // a chave estrangeira (coluna) que no caso tem na minha tabela se chama "weekday_id" mas vamos chama-la de 'Weekday'
     // além disso precisamos avisar o index.js (database) sobre o relacionamento
     this.belongsTo(models.Module, { foreignKey: 'module_id', as: 'module' })
-    this.belongsTo(models.Course, { foreignKey: 'course_id', as: 'course' })
   }
 }
 
