@@ -3,25 +3,17 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('classes', {
-      id: {
+    await queryInterface.createTable('course', {
+      id: { // copiamos do classes
         type: Sequelize.INTEGER, // número inteiro
         allowNull: false, // campo nulo = não
         autoIncrement: true, // ele vai dar sequencia no id, cria automatico
         primaryKey: true // chave primaria
       },
-      lesson: {
+      course: {
         type: Sequelize.STRING,
-        allowNull: false // campo nulo = não, todos tem que ter nome da aula
-      },
-      time: {
-        type: Sequelize.STRING,
-        allowNull: false // campo nulo = não, todos tem que ter tempo de duração
-      },
-      status: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false, // se não mandar informação nenhuma o valor dele vai ser falso
-        allowNull: false
+        allowNull: false, // campo nulo = não, todos tem que ter nome
+        unique: true // tem que ser único, não pode ter outro dia da semana igual
       },
       created_at: {
         type: Sequelize.DATE,
@@ -35,6 +27,6 @@ module.exports = {
   },
 
   async down (queryInterface) {
-    await queryInterface.dropTable('classes')
+    await queryInterface.dropTable('course')
   }
 }
