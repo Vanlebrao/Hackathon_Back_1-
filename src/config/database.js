@@ -5,7 +5,7 @@ module.exports = {
   // url: quando fizer o deploy coloca a url aqui;
   host: 'localhost',
   username: 'postgres', // username pra entrar no Postbird
-  port: 5433,
+  port: 5432,
   password: 'codemaster', // senha pra entrar no Postbird
   database: 'hackton-users', // conforme arquivo já criado no Postbird
   define: {

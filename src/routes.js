@@ -7,6 +7,7 @@ import ModuleController from './App/Controllers/ModuleController.js'
 import SessionController from './App/Controllers/SessionController.js'
 import UserController from './App/Controllers/UserController.js'
 import WeekdaysController from './App/Controllers/WeekdaysController.js'
+import AulaController from './App/Controllers/AulaController.js'
 
 const routes = new Router()
 
@@ -17,11 +18,18 @@ routes.get('/', (request, response) => {
 routes.post('/users', UserController.store)
 routes.post('/sessions', SessionController.store)
 
+
+
 routes.use(authMiddleware) // todas as rotas que tiverem abaixo disso (aqui no código) vão receber meu Middleware e será autenticado
 
 routes.post('/class', ClassController.store) // nesta rota vamos criar uma nova aula
 routes.get('/class', ClassController.index) // rota de get para mostrar todas as aulas do banco de dados
 routes.put('/class/:id', ClassController.update) // rota put para alterar os dados das aulas de um id expecífico.
+
+routes.post('/aula', AulaController.store) // nesta rota vamos criar uma nova aula
+routes.get('/aula', AulaController.index) // rota de get para mostrar todas as aulas do banco de dados
+routes.put('/aula/:id', AulaController.update) // rota put para alterar os dados das aulas de um id expecífico.
+routes.delete('/aula/:id', AulaController.delete) // rota delete para deletar uma aula de um id expecífico.
 
 routes.post('/weekday', WeekdaysController.store) // nesta rota vamos criar os dias da semana
 routes.get('/weekday', WeekdaysController.index) // rota de get para mostrar todas os dias da semana

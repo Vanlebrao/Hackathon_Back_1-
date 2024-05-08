@@ -6,8 +6,9 @@ import Module from '../App/models/Module.js'
 import User from '../App/models/User.js'
 import Weekdays from '../App/models/Weekdays.js'
 import database from '../config/database.js'
+import Aula from '../App/models/Aula.js'
 
-const models = [User, Class, Weekdays, Habits, Module, Course]
+const models = [User, Class, Weekdays, Habits, Module, Course, Aula]
 class Database {
   constructor () { // Toda vez que a minha classe DataBase for instanciada o método constructor é chamado automaticamente e ele chama os métodos abaixo
     this.init() // método initi ele faz a conexão dos models do Postgres

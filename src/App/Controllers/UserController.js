@@ -45,6 +45,8 @@ class UserController {
     })
     return response.status(201).json({ id: user.id, name, email, admin })
   }
+
+  
 }
 
 export default new UserController()
